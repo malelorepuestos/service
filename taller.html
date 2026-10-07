@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Malelo Taller</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Malelo Taller">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>window.qrcode||document.write('<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"><\/script>')</script>
+<style>
+:root{
+  --negro:#000; --texto:#1f2226; --gris:#5d636b; --linea:#d9dde2; --chapa:#eef0f3; --blanco:#fff;
+  --ambar:#FFC000; --naranja:#CA5B07; --ok:#0e7a35; --ok-bg:#ddf2e3; --av-tx:#7a5200; --mal:#c62828; --placa-azul:#1f3f99;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--chapa);color:var(--texto);font-family:Barlow,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.4}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px}
+h2{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:24px;margin:0 0 10px;color:var(--negro)}
+h3{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;margin:16px 0 4px;color:var(--negro);display:flex;justify-content:space-between;align-items:center}
+.top{background:var(--blanco);border-bottom:1px solid var(--linea);position:sticky;top:0;z-index:5}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;padding-bottom:10px}
+.logo{height:32px;width:auto;display:block}
+.tabs{display:flex;gap:4px;background:var(--chapa);border-radius:10px;padding:3px}
+.tab{border:0;background:transparent;border-radius:8px;padding:8px 12px;font-weight:700;font-size:14.5px;cursor:pointer;color:var(--gris)}
+.tab[aria-selected="true"]{background:var(--negro);color:#fff}
+.bloque{background:var(--blanco);border-radius:14px;padding:16px 14px;margin:12px 0;border:1px solid var(--linea)}
+label{display:block;font-size:14px;font-weight:600;color:var(--gris);margin:10px 0 4px}
+input,select,textarea{width:100%;border:1.5px solid #b9bfc7;border-radius:10px;padding:11px 12px;background:#fff;font-size:17px;min-height:48px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--negro);box-shadow:0 0 0 3px rgba(255,192,0,.55)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.fila-buscar{display:flex;gap:8px;align-items:stretch}
+.in-patente{font:700 28px/1 "Barlow Condensed",sans-serif;letter-spacing:3px;text-transform:uppercase;text-align:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;min-height:50px;padding:0 18px;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none}
+.btn-negro{background:var(--negro);color:#fff}
+.btn-ambar{background:var(--ambar);color:var(--negro);box-shadow:0 2px 0 #c99700}
+.btn-linea{background:#fff;color:var(--negro);border:1.5px solid var(--negro)}
+.btn-full{width:100%;margin-top:10px}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.tab:focus-visible,.seg button:focus-visible{outline:3px solid var(--naranja);outline-offset:2px}
+.resumen{margin-top:12px;padding:12px;border-radius:10px;background:var(--chapa);font-size:15px}
+.resumen strong{color:var(--negro);font-size:17px}
+.resumen a{color:var(--negro);font-weight:600}
+.nuevo{background:#fff0c2;color:var(--av-tx)}
+details.datos{margin-top:10px}
+details.datos summary{cursor:pointer;font-weight:700;padding:8px 0;color:var(--negro)}
+.ayuda{font-size:13.5px;color:var(--gris);margin:4px 0 0}
+.aviso{font-size:14px;color:var(--av-tx);background:#fff0c2;border-radius:8px;padding:8px 10px;margin-top:8px}
+
+.item{padding:12px 0;border-top:1px solid var(--linea)}
+.item:first-of-type{border-top:0}
+.item-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:8px}
+.item-nom{font-weight:700;color:var(--negro)}
+.item-prev{font-size:13px;color:var(--gris);text-align:right}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.seg.c3{grid-template-columns:repeat(3,1fr)}
+.seg button{border:1.5px solid #b9bfc7;background:#fff;border-radius:9px;min-height:44px;font-weight:700;font-size:14px;cursor:pointer;padding:0 2px;color:var(--texto)}
+.seg button[aria-pressed="true"][data-e="CAMBIADO"]{background:var(--negro);border-color:var(--negro);color:#fff}
+.seg button[aria-pressed="true"][data-e="OK"]{background:var(--ok);border-color:var(--ok);color:#fff}
+.seg button[aria-pressed="true"][data-e="AGENDAR"]{background:var(--ambar);border-color:#c99700;color:var(--negro)}
+.seg button[aria-pressed="true"][data-e="CAMBIAR"]{background:var(--mal);border-color:var(--mal);color:#fff}
+.extra{display:grid;grid-template-columns:1fr 1fr;gap:0 10px;margin-top:4px}
+.extra .full{grid-column:1 / -1}
+.mini{border:0;background:none;color:var(--negro);font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer;padding:4px 0}
+
+.barra{position:sticky;bottom:0;background:var(--blanco);border-top:1px solid var(--linea);padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:5}
+.barra .wrap{display:flex;gap:10px;align-items:center}
+.barra .cuenta{font-size:14px;color:var(--gris);flex:1}
+.barra .btn{flex:1.4}
+
+.error{position:fixed;left:12px;right:12px;top:12px;z-index:20;background:var(--mal);color:#fff;border-radius:12px;padding:12px 14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.cargando{opacity:.6;pointer-events:none}
+.pin-box{max-width:360px;margin:12vh auto 0;text-align:center}
+.pin-box .logo{height:56px;margin:0 auto 18px}
+.pin-in{font:700 32px/1 "Barlow Condensed",sans-serif;letter-spacing:10px;text-align:center}
+.listo{text-align:center}
+.listo .ok-ico{width:64px;height:64px;margin:6px auto 8px}
+.qr{width:200px;margin:14px auto 6px}
+.qr svg{width:100%;height:auto;display:block}
+.link-txt{font-size:13px;color:var(--gris);word-break:break-all}
+.acciones{display:grid;gap:10px;margin-top:14px}
+.acciones .btn{width:100%}
+.placa-mini{display:inline-block;border:2px solid var(--negro);border-radius:5px;font:700 18px/1 "Barlow Condensed",sans-serif;letter-spacing:1.5px;padding:3px 7px 2px;border-top:6px solid var(--placa-azul);background:#fff;color:var(--negro)}
+.llamar-item{padding:14px 0;border-top:1px solid var(--linea)}
+.llamar-item:first-of-type{border-top:0}
+.ll-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ll-veh{font-weight:700;color:var(--negro)}
+.tag{font-size:12.5px;font-weight:700;border-radius:6px;padding:3px 7px}
+.t1{background:var(--mal);color:#fff}.t2{background:var(--ambar);color:var(--negro)}.t3{background:#fff0c2;color:var(--av-tx)}
+.ll-mot{margin:6px 0 2px}
+.ll-sub{font-size:13.5px;color:var(--gris)}
+.ll-acc{display:flex;gap:8px;margin-top:8px}
+.ll-acc .btn{min-height:42px;font-size:14.5px;padding:0 12px}
+[hidden]{display:none !important}
+@media (max-width:370px){ .seg button{font-size:12.5px} .tab{padding:8px 9px} }
+</style>
+</head>
+<body>
+<div id="err" class="error" hidden role="alert"></div>
+
+<div id="pantalla-pin" class="wrap" hidden>
+  <div class="pin-box">
+    <img class="logo" id="logo-pin" alt="">
+    <h2>Carga de service</h2>
+    <label for="pin">PIN del taller</label>
+    <input id="pin" class="pin-in" type="password" inputmode="numeric" autocomplete="off" maxlength="12">
+    <button id="btn-pin" class="btn btn-negro btn-full">Entrar</button>
+  </div>
+</div>
+
+<div id="pantalla-app" hidden>
+  <header class="top"><div class="wrap">
+    <img class="logo" id="logo-top" alt="">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-cargar" aria-selected="true">Cargar</button>
+      <button class="tab" role="tab" id="tab-llamar" aria-selected="false">A llamar</button>
+    </div>
+  </div></header>
+
+  <main id="vista-cargar" class="wrap">
+    <div id="paso-form">
+      <div class="bloque">
+        <h2>Vehículo</h2>
+        <label for="patente">Patente</label>
+        <div class="fila-buscar">
+          <input id="patente" class="in-patente" autocomplete="off" autocapitalize="characters" placeholder="AB 123 CD" maxlength="10">
+          <button id="btn-buscar" class="btn btn-negro">Buscar</button>
+        </div>
+        <div id="resumen" class="resumen" hidden></div>
+        <details class="datos" id="datos" hidden>
+          <summary>Datos del vehículo y del cliente</summary>
+          <div class="grid2">
+            <div><label for="marca">Marca</label><input id="marca" autocomplete="off"></div>
+            <div><label for="modelo">Modelo</label><input id="modelo" autocomplete="off"></div>
+            <div><label for="anio">Año</label><input id="anio" inputmode="numeric" autocomplete="off"></div>
+            <div><label for="version">Versión / motor</label><input id="version" autocomplete="off"></div>
+          </div>
+          <label for="cliente">Cliente</label><input id="cliente" autocomplete="off">
+          <label for="telefono">Celular del cliente</label><input id="telefono" inputmode="tel" autocomplete="off" placeholder="2342 15 123456">
+          <p class="ayuda">El nombre y el celular no se muestran en la página del cliente.</p>
+        </details>
+      </div>
+
+      <div id="resto" hidden>
+        <div class="bloque">
+          <h2>Ingreso</h2>
+          <div class="grid2">
+            <div><label for="fecha">Fecha</label><input id="fecha" type="date"></div>
+            <div><label for="km">Kilómetros</label><input id="km" inputmode="numeric" autocomplete="off" placeholder="57995"></div>
+          </div>
+          <div id="aviso-km" class="aviso" hidden></div>
+          <label for="tanque">Tanque</label>
+          <select id="tanque"><option value="">Sin registrar</option><option>Lleno</option><option>3/4</option><option>Medio</option><option>1/4</option><option>Reserva</option></select>
+        </div>
+
+        <div class="bloque">
+          <h2>Mantenimiento</h2>
+          <p class="ayuda">Marcá solo lo que tocaste o revisaste. Al marcar Cambiado se propone el próximo km y la fecha; los podés corregir.</p>
+          <div id="lista-mant"></div>
+        </div>
+
+        <div class="bloque">
+          <h2>Control general</h2>
+          <div id="lista-ctrl"></div>
+        </div>
+
+        <div class="bloque">
+          <h2>Observaciones</h2>
+          <label for="obs">Comentario para el cliente</label>
+          <textarea id="obs" placeholder="Ej: Se recomienda cambiar tacos de motor en el próximo service."></textarea>
+          <label for="nota">Nota interna (no la ve el cliente)</label>
+          <textarea id="nota"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="paso-listo" class="bloque listo" hidden></div>
+  </main>
+
+  <main id="vista-llamar" class="wrap" hidden>
+    <div class="bloque">
+      <h2>Clientes a contactar</h2>
+      <p class="ayuda">Vencidos, por vencer y recomendaciones pendientes. El mensaje de WhatsApp ya va escrito.</p>
+      <div id="lista-llamar"><p class="ayuda">Cargando…</p></div>
+    </div>
+  </main>
+
+  <div class="barra" id="barra" hidden><div class="wrap">
+    <span class="cuenta" id="cuenta">0 ítems marcados</span>
+    <button id="btn-guardar" class="btn btn-ambar">Guardar service</button>
+  </div></div>
+</div>
+
+<script src="config.js"></script>
+<script>
+window.DATA = { negocio: { nombre: 'Malelo Inyección Electrónica', logo: 'logo.png' } };
+// Reemplazo de google.script.run: manda cada pedido a la planilla como texto JSON.
+window.google = { script: { run: (function(){
+  function pedir(cuerpo){
+    return fetch(window.MALELO_API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(cuerpo) })
+      .then(function(r){ return r.json(); }, function(){ throw new Error('Sin conexión con la planilla. Revisá internet y probá de nuevo.'); })
+      .then(function(j){ if (!j || !j.ok) throw new Error((j && j.error) || 'Error'); return j.data; });
+  }
+  function armar(ok, mal){
+    var o = { withSuccessHandler: function(f){ return armar(f, mal); }, withFailureHandler: function(f){ return armar(ok, f); } };
+    ['initCarga', 'buscarPatente', 'guardarService', 'listarVencimientos'].forEach(function(nombre){
+      o[nombre] = function(){
+        var a = arguments, cuerpo = { accion: nombre };
+        if (nombre === 'guardarService') cuerpo.datos = a[0];
+        else { cuerpo.pin = a[0]; if (nombre === 'buscarPatente') cuerpo.patente = a[1]; }
+        pedir(cuerpo).then(function(d){ if (ok) ok(d); }, function(e){ if (mal) mal(e); });
+      };
+    });
+    return o;
+  }
+  return armar(null, null);
+})() } };
+</script>
+<script>
+(function(){
+  var D = window.DATA || {negocio:{}};
+  var S = { pin:'', init:null, veh:null, items:{}, buscado:false, confirmarKm:false };
+  var $ = function(id){ return document.getElementById(id); };
+  var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function km(n){n=Math.round(+n||0);return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+  function fCorta(iso){var p=String(iso||'').split('-');return p.length===3?(+p[2])+' '+MESES[+p[1]-1]+' '+p[0]:'';}
+  function num(v){var s=String(v||'').replace(/\D/g,'');return s?+s:0;}
+  function hoyISO(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  function sumarMeses(iso,m){var a=iso.split('-').map(Number);var t=a[0]*12+(a[1]-1)+m;var y=Math.floor(t/12),mm=t%12+1;var u=new Date(Date.UTC(y,mm,0)).getUTCDate();return y+'-'+('0'+mm).slice(-2)+'-'+('0'+Math.min(a[2],u)).slice(-2);}
+  function normPat(p){return String(p||'').toUpperCase().replace(/[^A-Z0-9]/g,'');}
+  function guardarPin(p){try{localStorage.setItem('malelo_pin',p);}catch(e){}}
+  function leerPin(){try{return localStorage.getItem('malelo_pin')||'';}catch(e){return '';}}
+  function borrarPin(){try{localStorage.removeItem('malelo_pin');}catch(e){}}
+
+  var errT;
+  function error(msg){ var e=$('err'); e.textContent=msg; e.hidden=false; clearTimeout(errT); errT=setTimeout(function(){e.hidden=true;},6000); }
+  function llamar(fn){
+    var args = Array.prototype.slice.call(arguments,1);
+    return new Promise(function(ok,mal){
+      var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function(e){ mal(e && e.message ? e : new Error(String(e))); });
+      r[fn].apply(r,args);
+    });
+  }
+
+  // ---------- PIN ----------
+  if(D.negocio && D.negocio.logo){ $('logo-pin').src=D.negocio.logo; $('logo-top').src=D.negocio.logo; $('logo-pin').alt=D.negocio.nombre; $('logo-top').alt=D.negocio.nombre; }
+  function entrar(pin){
+    $('btn-pin').disabled=true;
+    return llamar('initCarga',pin).then(function(init){
+      S.pin=pin; S.init=init; guardarPin(pin);
+      $('pantalla-pin').hidden=true; $('pantalla-app').hidden=false;
+      armarListas(); $('fecha').value=init.hoy||hoyISO(); $('patente').focus();
+    }).catch(function(e){
+      borrarPin(); $('pantalla-pin').hidden=false; $('pantalla-app').hidden=true; error(e.message);
+    }).then(function(){ $('btn-pin').disabled=false; });
+  }
+  $('btn-pin').onclick=function(){ var p=$('pin').value.trim(); if(p) entrar(p); };
+  $('pin').onkeydown=function(ev){ if(ev.key==='Enter') $('btn-pin').click(); };
+  var guardado=leerPin(); if(guardado) entrar(guardado); else { $('pantalla-pin').hidden=false; $('pin').focus(); }
+
+  // ---------- TABS ----------
+  function tab(cual){
+    var c = cual==='cargar';
+    $('tab-cargar').setAttribute('aria-selected',c); $('tab-llamar').setAttribute('aria-selected',!c);
+    $('vista-cargar').hidden=!c; $('vista-llamar').hidden=c;
+    $('barra').hidden = !c || !S.buscado || !$('paso-listo').hidden;
+    if(!c) cargarLlamar();
+  }
+  $('tab-cargar').onclick=function(){tab('cargar');};
+  $('tab-llamar').onclick=function(){tab('llamar');};
+
+  // ---------- LISTAS DE ÍTEMS ----------
+  function armarListas(){
+    var plan = S.init.plan;
+    var mant = plan.filter(function(p){return p.tipo==='MANTENIMIENTO';});
+    var ctrl = plan.filter(function(p){return p.tipo==='CONTROL';});
+    $('lista-mant').innerHTML = mant.map(function(p){
+      return '<div class="item" data-c="'+esc(p.codigo)+'"><div class="item-top"><span class="item-nom">'+esc(p.item)+'</span><span class="item-prev" data-prev></span></div>'+
+        '<div class="seg" role="group" aria-label="'+esc(p.item)+'">'+
+        ['CAMBIADO','OK','AGENDAR','CAMBIAR'].map(function(e){return '<button type="button" data-e="'+e+'" aria-pressed="false">'+({CAMBIADO:'Cambiado',OK:'OK',AGENDAR:'Agendar',CAMBIAR:'Cambiar'})[e]+'</button>';}).join('')+
+        '</div><div class="extra" hidden>'+
+        (p.detalle?'<div class="full"><label>Detalle (marca, tipo)</label><input data-f="detalle" autocomplete="off" placeholder="'+(p.codigo==='ACEITE'?'Ej: 5W30 Motul':'Marca / código')+'"></div>':'')+
+        '<div><label>Próximo km</label><input data-f="proxKm" inputmode="numeric" autocomplete="off"></div>'+
+        '<div><label>Próxima fecha</label><input data-f="proxFecha" type="date"></div></div></div>';
+    }).join('');
+    var grupos=[]; var porG={};
+    ctrl.forEach(function(p){ var g=p.grupo||'Otros'; if(!porG[g]){porG[g]=[];grupos.push(g);} porG[g].push(p); });
+    $('lista-ctrl').innerHTML = grupos.map(function(g){
+      return '<h3>'+esc(g)+' <button type="button" class="mini" data-todo="'+esc(g)+'">Todo OK</button></h3>'+porG[g].map(function(p){
+        return '<div class="item" data-c="'+esc(p.codigo)+'" data-g="'+esc(g)+'"><div class="item-top"><span class="item-nom">'+esc(p.item)+'</span><span class="item-prev" data-prev></span></div>'+
+          '<div class="seg c3" role="group" aria-label="'+esc(p.item)+'">'+
+          ['OK','AGENDAR','CAMBIAR'].map(function(e){return '<button type="button" data-e="'+e+'" aria-pressed="false">'+({OK:'OK',AGENDAR:'Agendar',CAMBIAR:'Cambiar'})[e]+'</button>';}).join('')+
+          '</div></div>';
+      }).join('');
+    }).join('');
+  }
+  function planDe(c){ return S.init.plan.filter(function(p){return p.codigo===c;})[0]||{}; }
+
+  document.addEventListener('click',function(ev){
+    var b = ev.target.closest('.seg button');
+    if(b){
+      var it = b.closest('.item'); var c = it.getAttribute('data-c'); var e = b.getAttribute('data-e');
+      var ya = b.getAttribute('aria-pressed')==='true';
+      marcar(it, c, ya ? '' : e);
+      return;
+    }
+    var t = ev.target.closest('[data-todo]');
+    if(t){
+      var g=t.getAttribute('data-todo');
+      document.querySelectorAll('#lista-ctrl .item[data-g="'+g.replace(/"/g,'\\"')+'"]').forEach(function(it){ marcar(it, it.getAttribute('data-c'), 'OK'); });
+    }
+  });
+
+  function marcar(it, c, e){
+    it.querySelectorAll('.seg button').forEach(function(x){ x.setAttribute('aria-pressed', x.getAttribute('data-e')===e ? 'true':'false'); });
+    if(e) S.items[c] = S.items[c] || {};
+    if(e) S.items[c].estado = e; else delete S.items[c];
+    var extra = it.querySelector('.extra');
+    if(extra){
+      extra.hidden = e!=='CAMBIADO';
+      if(e==='CAMBIADO') proponer(it, c, false);
+    }
+    contar();
+  }
+
+  function proponer(it, c, soloNoEditados){
+    var p = planDe(c); var kmAct = num($('km').value); var fecha = $('fecha').value || hoyISO();
+    var inKm = it.querySelector('[data-f="proxKm"]'), inF = it.querySelector('[data-f="proxFecha"]'), inD = it.querySelector('[data-f="detalle"]');
+    if(inKm && !inKm.dataset.editado && p.km && kmAct) inKm.value = kmAct + p.km;
+    if(inF && !inF.dataset.editado && p.meses) inF.value = sumarMeses(fecha, p.meses);
+    if(!soloNoEditados && inD && !inD.value && S.veh && S.veh.items && S.veh.items[c] && S.veh.items[c].detalle) inD.value = S.veh.items[c].detalle;
+  }
+  document.addEventListener('input',function(ev){
+    var f = ev.target.getAttribute('data-f'); if(f) ev.target.dataset.editado = '1';
+    if(ev.target.id==='km' || ev.target.id==='fecha'){
+      S.confirmarKm=false; $('aviso-km').hidden=true;
+      document.querySelectorAll('#lista-mant .item').forEach(function(it){
+        var c=it.getAttribute('data-c'); if(S.items[c] && S.items[c].estado==='CAMBIADO') proponer(it,c,true);
+      });
+    }
+  });
+  function contar(){ var n=Object.keys(S.items).length; $('cuenta').textContent = n+(n===1?' ítem marcado':' ítems marcados'); }
+
+  // ---------- BUSCAR PATENTE ----------
+  function buscar(){
+    var pat = normPat($('patente').value);
+    if(pat.length<5){ error('Escribí la patente completa.'); return; }
+    $('btn-buscar').disabled=true;
+    llamar('buscarPatente', S.pin, pat).then(function(r){
+      S.veh = r; S.buscado = true; limpiarMarcas();
+      var v = r.vehiculo || {};
+      ['marca','modelo','anio','version','cliente','telefono'].forEach(function(k){ $(k).value = v[k]||''; });
+      $('patente').value = r.existe ? v.patenteFmt : r.patenteFmt;
+      var res = $('resumen'); res.hidden=false;
+      if(r.existe){
+        res.className='resumen';
+        res.innerHTML = '<strong>'+esc([v.marca,v.modelo].filter(Boolean).join(' ')||'Vehículo')+'</strong>'+(v.cliente?', '+esc(v.cliente):'')+
+          '<br>'+r.cantidad+(r.cantidad===1?' service cargado':' services cargados')+(r.ultimo?'. Último: '+km(r.ultimo.km)+' km el '+fCorta(r.ultimo.fecha)+'.':'.')+
+          '<br><a href="'+esc(r.link)+'" target="_blank" rel="noopener">Ver página del cliente</a>';
+        $('datos').open = false;
+      } else {
+        res.className='resumen nuevo';
+        res.innerHTML = '<strong>Vehículo nuevo.</strong> Completá los datos: se crea al guardar el service.';
+        $('datos').open = true;
+      }
+      $('datos').hidden=false; $('resto').hidden=false; $('barra').hidden=false;
+      // estado anterior de cada ítem
+      document.querySelectorAll('.item').forEach(function(it){
+        var c = it.getAttribute('data-c'); var prev = it.querySelector('[data-prev]'); var x = r.items && r.items[c];
+        if(!x){ prev.textContent=''; return; }
+        if(x.ultFecha) prev.textContent = 'Últ. cambio: '+(x.ultKm?km(x.ultKm)+' km, ':'')+fCorta(x.ultFecha);
+        else if(x.estado) prev.textContent = 'Últ. vez: '+({OK:'OK',AGENDAR:'agendar',CAMBIAR:'cambiar',CAMBIADO:'cambiado'})[x.estado]+(x.fecha?', '+fCorta(x.fecha):'');
+        else if(x.revisado) prev.textContent = 'Revisado: '+fCorta(x.revisado);
+        if(x.clave==='vencido'||x.clave==='cambiar'||x.estado==='CAMBIAR') prev.style.color='#c62828'; else prev.style.color='';
+      });
+      if(!r.existe) $('marca').focus(); else $('km').focus();
+    }).catch(function(e){ error(e.message); }).then(function(){ $('btn-buscar').disabled=false; });
+  }
+  $('btn-buscar').onclick=buscar;
+  $('patente').onkeydown=function(ev){ if(ev.key==='Enter') buscar(); };
+  $('patente').oninput=function(){ if(S.buscado && normPat($('patente').value)!==(S.veh && (S.veh.patente||(S.veh.vehiculo||{}).patente))){ S.buscado=false; $('resto').hidden=true; $('datos').hidden=true; $('resumen').hidden=true; $('barra').hidden=true; } };
+
+  function limpiarMarcas(){
+    S.items={}; S.confirmarKm=false;
+    document.querySelectorAll('.seg button').forEach(function(b){b.setAttribute('aria-pressed','false');});
+    document.querySelectorAll('.extra').forEach(function(x){x.hidden=true; x.querySelectorAll('input').forEach(function(i){i.value=''; delete i.dataset.editado;});});
+    ['km','obs','nota'].forEach(function(k){$(k).value='';}); $('tanque').value=''; $('aviso-km').hidden=true;
+    $('fecha').value = (S.init && S.init.hoy) || hoyISO();
+    contar();
+  }
+
+  // ---------- GUARDAR ----------
+  $('btn-guardar').onclick=function(){
+    var kmAct = num($('km').value);
+    if(!kmAct){ error('Falta el kilometraje.'); $('km').focus(); return; }
+    if(!Object.keys(S.items).length){ error('Marcá al menos un ítem.'); return; }
+    var ult = S.veh && S.veh.ultimo;
+    if(ult && ult.km && kmAct < ult.km && !S.confirmarKm){
+      S.confirmarKm = true; var a=$('aviso-km'); a.hidden=false;
+      a.textContent = 'El km es menor al último registrado ('+km(ult.km)+'). Revisalo, o tocá Guardar de nuevo para confirmar.';
+      $('km').focus(); return;
+    }
+    var faltaKm = [];
+    var items = Object.keys(S.items).map(function(c){
+      var it = document.querySelector('.item[data-c="'+c+'"]'); var o = {codigo:c, estado:S.items[c].estado};
+      if(o.estado==='CAMBIADO'){
+        var g=function(f){var x=it.querySelector('[data-f="'+f+'"]');return x?x.value.trim():'';};
+        o.detalle=g('detalle'); o.proxKm=g('proxKm'); o.proxFecha=g('proxFecha');
+        if(o.proxKm && num(o.proxKm)<=kmAct) faltaKm.push(planDe(c).item);
+      }
+      return o;
+    });
+    if(faltaKm.length){ error('El próximo km tiene que ser mayor al actual: '+faltaKm.join(', ')+'.'); return; }
+    var datos = {
+      pin:S.pin, fecha:$('fecha').value, km:kmAct, tanque:$('tanque').value, obs:$('obs').value, nota:$('nota').value, items:items,
+      vehiculo:{patente:normPat($('patente').value), cliente:$('cliente').value, telefono:$('telefono').value, marca:$('marca').value, modelo:$('modelo').value, anio:$('anio').value, version:$('version').value}
+    };
+    var btn=$('btn-guardar'); btn.disabled=true; btn.textContent='Guardando…';
+    llamar('guardarService', datos).then(listo).catch(function(e){ error(e.message); })
+      .then(function(){ btn.disabled=false; btn.textContent='Guardar service'; });
+  };
+
+  function listo(r){
+    $('paso-form').hidden=true; $('barra').hidden=true; var L=$('paso-listo'); L.hidden=false;
+    var waCli = r.whatsappCliente ? 'https://wa.me/'+r.whatsappCliente+'?text='+encodeURIComponent(r.mensaje) : 'https://wa.me/?text='+encodeURIComponent(r.mensaje);
+    L.innerHTML = '<svg class="ok-ico" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="#0e7a35"/><path d="M18 33l9 9 19-20" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+      '<h2>Service guardado</h2><span class="placa-mini">'+esc(r.patenteFmt)+'</span>'+
+      '<div class="qr" id="qr-listo"></div><p class="link-txt">'+esc(r.link)+'</p>'+
+      '<div class="acciones">'+
+      '<a class="btn btn-ambar" target="_blank" rel="noopener" href="'+esc(waCli)+'">'+(r.whatsappCliente?'Mandar el link al cliente por WhatsApp':'Mandar el link por WhatsApp')+'</a>'+
+      '<a class="btn btn-negro" target="_blank" rel="noopener" href="'+esc(r.sticker)+'">Imprimir sticker con QR</a>'+
+      '<a class="btn btn-linea" target="_blank" rel="noopener" href="'+esc(r.link)+'">Ver página del cliente</a>'+
+      '<button class="btn btn-linea" id="btn-otro">Cargar otro service</button></div>';
+    try{ var q=qrcode(0,'M'); q.addData(r.link); q.make(); $('qr-listo').innerHTML=q.createSvgTag({cellSize:4,margin:2,scalable:true}); }catch(e){}
+    $('btn-otro').onclick=function(){
+      L.hidden=true; $('paso-form').hidden=false; S.veh=null; S.buscado=false; limpiarMarcas();
+      $('patente').value=''; ['marca','modelo','anio','version','cliente','telefono'].forEach(function(k){$(k).value='';});
+      $('resto').hidden=true; $('datos').hidden=true; $('resumen').hidden=true; window.scrollTo(0,0); $('patente').focus();
+    };
+    window.scrollTo(0,0);
+  }
+
+  // ---------- A LLAMAR ----------
+  function cargarLlamar(){
+    $('lista-llamar').innerHTML='<p class="ayuda">Cargando…</p>';
+    llamar('listarVencimientos', S.pin).then(function(lista){
+      if(!lista.length){ $('lista-llamar').innerHTML='<p>No hay vencimientos en los próximos días. Cuando cargues más services, aparecen acá.</p>'; return; }
+      $('lista-llamar').innerHTML = lista.map(function(x){
+        return '<div class="llamar-item"><div class="ll-top"><span class="tag t'+x.prioridad+'">'+esc(x.prioridadTxt)+'</span><span class="placa-mini">'+esc(x.patente)+'</span><span class="ll-veh">'+esc(x.vehiculo)+'</span></div>'+
+          '<p class="ll-mot">'+esc(x.motivos.join(', '))+'</p>'+
+          '<p class="ll-sub">'+esc(x.cliente||'Sin nombre')+(x.telefono?', '+esc(x.telefono):'')+'. Último service: '+fCorta(x.ultimaFecha)+(x.ultimoKm?', '+km(x.ultimoKm)+' km':'')+(x.kmEst?'. Hoy andaría por los '+km(x.kmEst)+' km':'')+'.</p>'+
+          '<div class="ll-acc">'+(x.whatsapp?'<a class="btn btn-ambar" target="_blank" rel="noopener" href="'+esc(x.whatsapp)+'">WhatsApp</a>':'<span class="ll-sub">Sin celular válido</span>')+
+          '<a class="btn btn-linea" target="_blank" rel="noopener" href="'+esc(S.init.urlApp+'?v='+x.id)+'">Ver registro</a></div></div>';
+      }).join('');
+    }).catch(function(e){ $('lista-llamar').innerHTML=''; error(e.message); });
+  }
+})();
+</script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sticker · Malelo</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>window.qrcode||document.write('<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"><\/script>')</script>
+<style>
+:root{--negro:#000;--ambar:#FFC000;--gris:#5d636b;--placa-azul:#1f3f99;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:#e4e7eb;font-family:Barlow,system-ui,sans-serif;color:var(--negro)}
+.pantalla{max-width:420px;margin:0 auto;padding:20px 16px 40px;text-align:center}
+.pantalla p{color:var(--gris);font-size:14.5px;margin:12px 0 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 26px;border:0;border-radius:12px;background:var(--negro);color:#fff;font:700 17px Barlow,sans-serif;cursor:pointer;margin-top:18px}
+.btn:focus-visible{outline:3px solid #CA5B07;outline-offset:2px}
+.sticker{width:65mm;height:95mm;margin:0 auto;background:#fff;border:0.4mm solid #000;border-radius:3mm;overflow:hidden;display:flex;flex-direction:column;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.s-logo{width:42mm;height:auto;margin-top:3.5mm}
+.s-txt{font:700 4.4mm/1.05 "Barlow Condensed",sans-serif;text-align:center;margin:2mm 5mm 0}
+.s-qr{width:38mm;height:38mm;margin-top:2mm;flex:none}
+.s-qr svg{width:100%;height:100%;display:block}
+.s-pat{margin-top:2mm;border:0.45mm solid #000;border-top:1.6mm solid var(--placa-azul);border-radius:1.2mm;font:700 5mm/1 "Barlow Condensed",sans-serif;letter-spacing:.6mm;padding:.8mm 2.2mm .6mm}
+.s-veh{font:500 3mm/1.2 Barlow,sans-serif;margin-top:1mm;color:#333}
+.s-pie{margin-top:auto;width:100%;background:var(--ambar);font:700 3.4mm/1.15 Barlow,sans-serif;text-align:center;padding:1.8mm 2mm}
+@media print{
+  @page{size:auto;margin:8mm}
+  body{background:#fff}
+  .pantalla{padding:0}
+  .no-print{display:none !important}
+  .sticker{box-shadow:none;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="pantalla">
+  <div class="sticker">
+    <img class="s-logo" id="s-logo" alt="">
+    <div class="s-txt">Escaneá y mirá el service de tu vehículo</div>
+    <div class="s-qr" id="s-qr" role="img" aria-label="Código QR"></div>
+    <div class="s-pat" id="s-pat"></div>
+    <div class="s-veh" id="s-veh"></div>
+    <div class="s-pie" id="s-pie"></div>
+  </div>
+  <button class="btn no-print" onclick="window.print()">Imprimir sticker</button>
+  <p class="no-print">Tamaño real: 6,5 × 9,5 cm. Imprimilo en papel autoadhesivo al 100% (sin "ajustar a la página") y probá escanearlo antes de pegarlo.</p>
+</div>
+<script src="config.js"></script>
+<script>
+(function(){
+  var v = (new URLSearchParams(location.search).get('v') || '').trim();
+  window.__arranque = function(){
+    if (!v) { document.querySelector('.pantalla').innerHTML = '<p>Falta el código del vehículo.</p>'; return; }
+    fetch(window.MALELO_API + '?api=sticker&v=' + encodeURIComponent(v)).then(function(r){ return r.json(); }).then(function(j){
+      if (!j || !j.ok) throw new Error((j && j.error) || 'Error');
+      window.DATA = j.data;
+      document.title = 'Sticker ' + j.data.patente + ' · Malelo';
+      window.__main();
+    }).catch(function(e){
+      document.querySelector('.pantalla').innerHTML = '<p>No se pudo armar el sticker: ' + String(e.message || e).replace(/[<>&]/g, '') + '</p>';
+    });
+  };
+})();
+</script>
+<script>
+window.__main = function(){
+  var D = window.DATA || {}; var N = D.negocio || {};
+  var el = function(id){return document.getElementById(id);};
+  if(N.logo){ el('s-logo').src = N.logo; el('s-logo').alt = N.nombre || ''; } else { el('s-logo').style.display='none'; }
+  el('s-pat').textContent = D.patente || '';
+  el('s-veh').textContent = D.vehiculo || '';
+  var pie = N.telefono ? 'Turnos: ' + N.telefono : (N.nombre || '');
+  el('s-pie').textContent = pie;
+  try{ var q = qrcode(0,'M'); q.addData(D.link || ''); q.make(); el('s-qr').innerHTML = q.createSvgTag({cellSize:4, margin:0, scalable:true}); }
+  catch(e){ el('s-qr').textContent = 'No se pudo generar el QR'; }
+};
+if (window.__arranque) window.__arranque();
+</script>
+</body>
+</html>
