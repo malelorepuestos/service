@@ -5,28 +5,30 @@
 <title>Sticker · Malelo</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>window.qrcode||document.write('<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>window.PDFLib||document.write('<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"><\/script>')</script>
 <style>
 :root{--negro:#000;--gris:#5d636b;color-scheme:light}
 *{box-sizing:border-box}
-body{margin:0;background:#e4e7eb;font-family:Barlow,system-ui,sans-serif;color:var(--negro)}
+body{margin:0;background:#e4e7eb;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--negro)}
 .pantalla{max-width:420px;margin:0 auto;padding:20px 16px 40px;text-align:center}
-.pantalla p{color:var(--gris);font-size:14.5px;margin:12px 0 0}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 26px;border:0;border-radius:12px;background:var(--negro);color:#fff;font:700 17px Barlow,sans-serif;cursor:pointer;margin-top:18px}
-.btn:focus-visible{outline:3px solid #CA5B07;outline-offset:2px}
-/* Etiqueta térmica 50 x 80 mm, solo negro */
-.sticker{width:50mm;height:80mm;margin:0 auto;background:#fff;color:#000;overflow:hidden;display:flex;flex-direction:column;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.2);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pantalla p{color:var(--gris);font-size:14.5px;line-height:1.45;margin:14px 0 0}
+.acciones{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border:0;border-radius:12px;background:var(--negro);color:#fff;font:700 17px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;cursor:pointer}
+.btn[aria-disabled="true"]{background:#8a9099;pointer-events:none}
+.link{min-height:44px;padding:0 12px;border:0;background:none;color:var(--negro);font:600 15px system-ui,-apple-system,sans-serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.btn:focus-visible,.link:focus-visible{outline:3px solid #CA5B07;outline-offset:2px}
+/* Etiqueta térmica 50 x 80 mm, solo negro. Las medidas copian las del PDF. */
+.sticker{width:50mm;height:80mm;margin:0 auto;background:#fff;color:#000;overflow:hidden;display:flex;flex-direction:column;align-items:center;font-family:Helvetica,Arial,sans-serif;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.2);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .s-logo{width:34mm;height:auto;margin-top:2.5mm;filter:brightness(0)}
-.s-txt{font:700 3.7mm/1.05 "Barlow Condensed",sans-serif;text-align:center;margin:1.6mm 3mm 0}
-.s-qr{width:32mm;height:32mm;margin-top:1.4mm;flex:none}
+.s-txt{font-size:3.5mm;line-height:1.15;text-align:center;margin:1.4mm 2mm 0;white-space:nowrap}
+.s-qr{width:32mm;height:32mm;margin-top:1.3mm;flex:none}
 .s-qr svg{width:100%;height:100%;display:block}
-.s-pat{margin-top:1.4mm;border:0.45mm solid #000;border-top:1.2mm solid #000;border-radius:1mm;font:700 4.4mm/1 "Barlow Condensed",sans-serif;letter-spacing:.5mm;padding:.7mm 2mm .5mm}
-.s-veh{font:600 2.6mm/1.2 Barlow,sans-serif;margin-top:.7mm}
-.s-pie{margin-top:auto;width:100%;border-top:0.4mm solid #000;font:700 2.9mm/1.15 Barlow,sans-serif;text-align:center;padding:1.3mm 2mm 1.8mm}
+.s-pat{margin-top:1.4mm;border:0.45mm solid #000;border-top-width:1.2mm;border-radius:1mm;font-size:4.4mm;line-height:1;letter-spacing:.5mm;padding:.8mm 1.5mm .7mm 2mm;white-space:nowrap}
+.s-veh{font-size:2.7mm;line-height:1.2;margin-top:.8mm;max-width:46mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-pie{margin-top:auto;width:100%;border-top:0.4mm solid #000;font-size:2.9mm;line-height:1.15;text-align:center;padding:1.6mm 2mm 1.9mm;white-space:nowrap}
 @media print{
   @page{size:50mm 80mm;margin:0}
   html,body{width:50mm;height:80mm;margin:0;background:#fff}
@@ -40,14 +42,17 @@ body{margin:0;background:#e4e7eb;font-family:Barlow,system-ui,sans-serif;color:v
 <div class="pantalla">
   <div class="sticker">
     <img class="s-logo" id="s-logo" alt="">
-    <div class="s-txt">Escaneá y mirá el service de tu vehículo</div>
+    <div class="s-txt">Escaneá y mirá el<br>service de tu vehículo</div>
     <div class="s-qr" id="s-qr" role="img" aria-label="Código QR"></div>
     <div class="s-pat" id="s-pat"></div>
     <div class="s-veh" id="s-veh"></div>
     <div class="s-pie" id="s-pie"></div>
   </div>
-  <button class="btn no-print" onclick="window.print()">Imprimir sticker</button>
-  <p class="no-print">Etiqueta de 50 × 80 mm para impresora térmica. En la ventana de impresión elegí el papel de 50 × 80 mm, márgenes "Ninguno" y escala 100%. Probá escanearlo antes de pegarlo.</p>
+  <div class="acciones no-print">
+    <a class="btn" id="btn-pdf" aria-disabled="true">Preparando el PDF…</a>
+    <button class="link" type="button" onclick="window.print()">Imprimir directo desde el navegador</button>
+  </div>
+  <p class="no-print" id="ayuda">El PDF ya viene en 50 × 80 mm. Abrilo y mandalo a la impresora térmica con tamaño real (100 %), sin "ajustar a la página". Probá escanearlo antes de pegarlo.</p>
 </div>
 <script src="config.js"></script>
 <script>
@@ -75,8 +80,142 @@ window.__main = function(){
   el('s-veh').textContent = D.vehiculo || '';
   var pie = N.telefono ? 'Turnos: ' + N.telefono : (N.nombre || '');
   el('s-pie').textContent = pie;
-  try{ var q = qrcode(0,'M'); q.addData(D.link || ''); q.make(); el('s-qr').innerHTML = q.createSvgTag({cellSize:4, margin:2, scalable:true}); }
-  catch(e){ el('s-qr').textContent = 'No se pudo generar el QR'; }
+  var Q = null;
+  try{ Q = qrcode(0,'M'); Q.addData(D.link || ''); Q.make(); el('s-qr').innerHTML = Q.createSvgTag({cellSize:4, margin:2, scalable:true}); }
+  catch(e){ Q = null; el('s-qr').textContent = 'No se pudo generar el QR'; }
+
+  // ---------- PDF de 50 x 80 mm (todo en negro puro, el QR en vectores) ----------
+  function mm(v){ return v * 72 / 25.4; }
+  function limpio(t){ return String(t || '').replace(/[^\x20-\x7E -ÿ]/g, '').replace(/\s+/g, ' ').trim(); }
+
+  // El logo se pasa a vectores en negro puro (unos 300 puntos por pulgada), así la
+  // impresora térmica no tiene grises ni fondos que convertir en puntitos.
+  function logoNegro(src){
+    return new Promise(function(ok){
+      if(!src) return ok(null);
+      var img = new Image();
+      img.onload = function(){
+        try{
+          var W = 420, H = Math.max(1, Math.round(W * img.naturalHeight / img.naturalWidth));
+          var c = document.createElement('canvas'); c.width = W; c.height = H;
+          var g = c.getContext('2d'); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H);
+          var d = g.getImageData(0, 0, W, H).data, tramos = [];
+          for (var f = 0; f < H; f++){
+            for (var x = 0; x < W; x++){
+              if(d[(f * W + x) * 4 + 3] <= 110) continue;
+              var x2 = x; while (x2 + 1 < W && d[(f * W + x2 + 1) * 4 + 3] > 110) x2++;
+              tramos.push([f, x, x2 - x + 1]); x = x2;
+            }
+          }
+          ok(tramos.length ? { W: W, H: H, tramos: tramos } : null);
+        }catch(e){ ok(null); }
+      };
+      img.onerror = function(){ ok(null); };
+      img.src = src;
+    });
+  }
+
+  function rect(x, y, w, h, r){ // rectángulo redondeado en mm, para drawSvgPath
+    var c = r * 0.5523;
+    return 'M' + (x + r) + ' ' + y + 'H' + (x + w - r) + 'C' + (x + w - r + c) + ' ' + y + ' ' + (x + w) + ' ' + (y + r - c) + ' ' + (x + w) + ' ' + (y + r) +
+      'V' + (y + h - r) + 'C' + (x + w) + ' ' + (y + h - r + c) + ' ' + (x + w - r + c) + ' ' + (y + h) + ' ' + (x + w - r) + ' ' + (y + h) +
+      'H' + (x + r) + 'C' + (x + r - c) + ' ' + (y + h) + ' ' + x + ' ' + (y + h - r + c) + ' ' + x + ' ' + (y + h - r) +
+      'V' + (y + r) + 'C' + x + ' ' + (y + r - c) + ' ' + (x + r - c) + ' ' + y + ' ' + (x + r) + ' ' + y + 'Z';
+  }
+
+  function armarPDF(logo){
+    var L = window.PDFLib;
+    return L.PDFDocument.create().then(function(doc){
+      doc.setTitle('Sticker ' + limpio(D.patente));
+      doc.setCreator(limpio(N.nombre) || 'Malelo');
+      var pg = doc.addPage([mm(50), mm(80)]);
+      return doc.embedFont(L.StandardFonts.HelveticaBold).then(function(F){
+        var negro = L.rgb(0, 0, 0), blanco = L.rgb(1, 1, 1);
+        var trazo = function(path, color){ pg.drawSvgPath(path, { x: 0, y: mm(80), scale: mm(1), color: color, borderWidth: 0 }); };
+        function medir(t, tam, maxW, esp){ // achica la letra si no entra; devuelve tamaño y ancho en mm
+          var s = tam;
+          var ancho = function(){ return F.widthOfTextAtSize(t, mm(s)) / mm(1) + (esp || 0) * (s / tam) * Math.max(0, t.length - 1); };
+          while (ancho() > maxW && s > 1.6) s *= 0.97;
+          return { s: s, w: ancho(), e: (esp || 0) * (s / tam) };
+        }
+        function centrado(t, base, tam, maxW, esp){ // base = línea base en mm desde arriba
+          t = limpio(t); if(!t) return null;
+          var m = medir(t, tam, maxW, esp), x = (50 - m.w) / 2;
+          if(!m.e){ pg.drawText(t, { x: mm(x), y: mm(80 - base), size: mm(m.s), font: F, color: negro }); return m; }
+          for (var i = 0; i < t.length; i++){
+            pg.drawText(t[i], { x: mm(x), y: mm(80 - base), size: mm(m.s), font: F, color: negro });
+            x += F.widthOfTextAtSize(t[i], mm(m.s)) / mm(1) + m.e;
+          }
+          return m;
+        }
+        // Línea base igual que en la pantalla (métricas de Arial/Helvetica: sube 0,905 y baja 0,212 del tamaño)
+        var base = function(arriba, tam, alto){ return arriba + ((alto - 1.117) / 2 + 0.905) * tam; };
+        var y = 2.5;
+        // Logo
+        if(logo){
+          var lc = 34 / logo.W, lp = '';
+          logo.tramos.forEach(function(t){ lp += 'M' + (8 + t[1] * lc).toFixed(3) + ' ' + (y + t[0] * lc).toFixed(3) + 'h' + (t[2] * lc).toFixed(3) + 'v' + lc.toFixed(4) + 'h' + (-t[2] * lc).toFixed(3) + 'z'; });
+          trazo(lp, negro); y += logo.H * lc;
+        }
+        else { centrado(N.nombre || '', y + 4, 4.2, 44); y += 5.5; }
+        // Frase
+        var tf = 3.5; y += 1.4;
+        centrado('Escaneá y mirá el', base(y, tf, 1.15), tf, 46);
+        centrado('service de tu vehículo', base(y + 1.15 * tf, tf, 1.15), tf, 46);
+        y += 2 * 1.15 * tf;
+        // QR (con su margen blanco de 2 módulos dentro de los 32 mm)
+        y += 1.3;
+        if(Q){
+          var n = Q.getModuleCount(), cel = 32 / (n + 4), x0 = 9 + 2 * cel, y0 = y + 2 * cel, path = '';
+          for (var f = 0; f < n; f++){
+            for (var c = 0; c < n; c++){
+              if(!Q.isDark(f, c)) continue;
+              var c2 = c; while (c2 + 1 < n && Q.isDark(f, c2 + 1)) c2++;
+              path += 'M' + (x0 + c * cel) + ' ' + (y0 + f * cel) + 'h' + ((c2 - c + 1) * cel) + 'v' + cel + 'h' + (-(c2 - c + 1) * cel) + 'z';
+              c = c2;
+            }
+          }
+          trazo(path, negro);
+        }
+        y += 32;
+        // Patente
+        var pat = limpio(D.patente);
+        if(pat){
+          y += 1.4;
+          var pt = medir(pat, 4.4, 40, 0.5), bw = pt.w + 2 + 1.5 + 0.9, bh = 1.2 + 0.8 + pt.s + 0.7 + 0.45, bx = (50 - bw) / 2;
+          trazo(rect(bx, y, bw, bh, 1), negro);
+          trazo(rect(bx + 0.45, y + 1.2, bw - 0.9, bh - 1.65, 0.55), blanco);
+          var px = bx + 0.45 + 2, bp = base(y + 1.2 + 0.8, pt.s, 1);
+          for (var i = 0; i < pat.length; i++){
+            pg.drawText(pat[i], { x: mm(px), y: mm(80 - bp), size: mm(pt.s), font: F, color: negro });
+            px += F.widthOfTextAtSize(pat[i], mm(pt.s)) / mm(1) + pt.e;
+          }
+          y += bh;
+        }
+        // Vehículo
+        if(limpio(D.vehiculo)){ var tv = 2.7; y += 0.8; centrado(D.vehiculo, base(y, tv, 1.2), tv, 46); }
+        // Pie con línea
+        var tp = 2.9, yl = 80 - 1.9 - 1.15 * tp - 1.6 - 0.4;
+        pg.drawRectangle({ x: 0, y: mm(80 - yl - 0.4), width: mm(50), height: mm(0.4), color: negro });
+        centrado(pie, base(yl + 0.4 + 1.6, tp, 1.15), tp, 46);
+        return doc.save();
+      });
+    });
+  }
+
+  function prepararPDF(){
+    var btn = el('btn-pdf');
+    if(!window.PDFLib || !Q){ btn.textContent = 'No se pudo armar el PDF'; el('ayuda').textContent = 'Usá "Imprimir directo desde el navegador": en la ventana de impresión elegí el papel de 50 × 80 mm, márgenes "Ninguno" y escala 100 %.'; return; }
+    logoNegro(N.logo).then(armarPDF).then(function(bytes){
+      var url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+      btn.href = url;
+      btn.setAttribute('download', 'sticker-' + (limpio(D.patente).replace(/[^A-Za-z0-9]/g, '') || 'malelo') + '.pdf');
+      btn.removeAttribute('aria-disabled');
+      btn.textContent = 'Descargar PDF 50 × 80 mm';
+      window.__stickerPDF = bytes;
+    }).catch(function(){ btn.textContent = 'No se pudo armar el PDF'; });
+  }
+  prepararPDF();
 };
 if (window.__arranque) window.__arranque();
 </script>
