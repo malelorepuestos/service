@@ -172,7 +172,7 @@ details.datos summary{cursor:pointer;font-weight:700;padding:8px 0;color:var(--n
           <div id="lista-mant"></div>
         </div>
 
-        <div class="bloque">
+        <div class="bloque" id="bloque-ctrl">
           <h2>Control general</h2>
           <div id="lista-ctrl"></div>
         </div>
@@ -180,7 +180,7 @@ details.datos summary{cursor:pointer;font-weight:700;padding:8px 0;color:var(--n
         <div class="bloque">
           <h2>Observaciones</h2>
           <label for="obs">Comentario para el cliente</label>
-          <textarea id="obs" placeholder="Ej: Se recomienda cambiar tacos de motor en el próximo service."></textarea>
+          <textarea id="obs" placeholder="Ej: Se recomienda cambiar las pastillas de freno en el próximo service."></textarea>
           <label for="nota">Nota interna (no la ve el cliente)</label>
           <textarea id="nota"></textarea>
         </div>
@@ -294,9 +294,10 @@ window.google = { script: { run: (function(){
         ['CAMBIADO','OK','AGENDAR','CAMBIAR'].map(function(e){return '<button type="button" data-e="'+e+'" aria-pressed="false">'+({CAMBIADO:'Cambiado',OK:'OK',AGENDAR:'Agendar',CAMBIAR:'Cambiar'})[e]+'</button>';}).join('')+
         '</div><div class="extra" hidden>'+
         (p.detalle?'<div class="full"><label>Detalle (marca, tipo)</label><input data-f="detalle" autocomplete="off" placeholder="'+(p.codigo==='ACEITE'?'Ej: 5W30 Motul':'Marca / código')+'"></div>':'')+
-        '<div><label>Próximo km</label><input data-f="proxKm" inputmode="numeric" autocomplete="off"></div>'+
+        '<div><label>'+(p.codigo==='DISTRIBUCION'?'Próximo cambio (km)':'Próximo km')+'</label><input data-f="proxKm" inputmode="numeric" autocomplete="off"'+(p.codigo==='DISTRIBUCION'?' placeholder="Según el motor"':'')+'></div>'+
         '<div><label>Próxima fecha</label><input data-f="proxFecha" type="date"></div></div></div>';
     }).join('');
+    $('bloque-ctrl').hidden = !ctrl.length;
     var grupos=[]; var porG={};
     ctrl.forEach(function(p){ var g=p.grupo||'Otros'; if(!porG[g]){porG[g]=[];grupos.push(g);} porG[g].push(p); });
     $('lista-ctrl').innerHTML = grupos.map(function(g){

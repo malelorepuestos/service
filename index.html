@@ -67,6 +67,12 @@ section{padding:28px 0}
 .prox-o{margin:12px 0 0;font-size:17px}
 .prox-o strong{color:var(--titulo)}
 .prox-items{margin:6px 0 0;color:var(--gris);font-size:15px}
+.dist{margin-top:26px;padding-top:22px;border-top:1px solid var(--linea)}
+.dist .prox-label{margin-top:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dist-vacio{margin-top:26px;padding:14px;border:1px dashed #4a4a4a;border-radius:10px}
+.dist-vacio strong{display:block;color:var(--titulo);font-size:17px;margin-bottom:4px}
+.dist-vacio p{margin:0;color:var(--gris);font-size:15px}
+.dist-vacio a{display:inline-block;margin-top:8px;color:var(--ambar);font-weight:700;font-size:15.5px}
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:12px;font:700 18px/1.1 Barlow,sans-serif;text-decoration:none;border:0;cursor:pointer;padding:0 16px}
 .btn-turno{margin-top:24px;background:var(--ambar);color:var(--negro);box-shadow:0 2px 0 #c99700}
 .btn-sec{margin-top:16px;background:var(--blanco);color:var(--negro);min-height:50px;font-size:16px}
@@ -99,6 +105,11 @@ section{padding:28px 0}
 .t-mal{color:#fff;background:var(--mal)}
 .reco .fila-nombre{font-size:18px}
 
+/* reseña en Google */
+.resena p{margin:0 0 4px;color:var(--texto)}
+.resena .estrellas{display:flex;gap:4px;margin:0 0 12px}
+.btn-google{margin-top:14px;background:var(--blanco);color:var(--negro);min-height:52px;font-size:17px}
+
 /* control */
 .ctrl-fecha{color:var(--gris);font-size:15px;margin:-8px 0 4px}
 .ctrl{list-style:none;margin:0;padding:0}
@@ -121,8 +132,11 @@ details[open] summary .chev{transform:rotate(180deg)}
 /* pie */
 footer{background:var(--fondo);border-top:3px solid var(--ambar);color:#e9e9e9;padding:28px 0 calc(34px + env(safe-area-inset-bottom));font-size:15.5px}
 footer .nom{font:700 22px/1.1 "Barlow Condensed",sans-serif;color:#fff;margin:0 0 10px}
+footer .logo-pie{height:58px;width:auto;display:block;margin:0 0 14px;filter:invert(1) hue-rotate(180deg)}
 footer p{margin:6px 0}
 footer a{color:var(--ambar)}
+footer .wa{display:inline-flex;align-items:center;gap:8px;font-weight:700;text-decoration:none;min-height:44px}
+footer .wa span{text-decoration:underline;text-underline-offset:3px}
 footer .legal{margin-top:18px;font-size:13px;color:#a9a9a9}
 .vacio{color:var(--gris)}
 
@@ -171,6 +185,8 @@ window.__main = function(){
   function wa(msg){return N.whatsapp?'https://wa.me/'+N.whatsapp+'?text='+encodeURIComponent(msg):'';}
   var ICON_CHAT='<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.9 3 3 6.6 3 11c0 2.2 1 4.2 2.6 5.6L5 21l4.2-2.2c.9.2 1.8.3 2.8.3 5.1 0 9-3.6 9-8.1S17.1 3 12 3zm-4 9.3a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6zm4 0a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6zm4 0a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6z"/></svg>';
   var ICON_CHECK='<svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#0e6b2f"/><path d="M5.6 10.4l2.9 2.9 5.9-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ICON_WA='<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2a9.7 9.7 0 00-8.3 14.8L2.3 21.8l4.9-1.3A9.7 9.7 0 1012 2.2zm0 17.7a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 19.9zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8 1c-.1.2-.3.2-.5.1a6.5 6.5 0 01-3.2-2.8c-.2-.4.2-.4.7-1.2.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 00-.6.3 2.7 2.7 0 00-.8 2c0 1.2.9 2.3 1 2.5.1.1 1.7 2.6 4.1 3.7 1.5.7 2.1.7 2.9.6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.4-.2z"/></svg>';
+  var ICON_STAR='<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FFC000" d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>';
   var ICON_CHEV='<svg class="chev" width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   var V = D.vehiculo || {};
@@ -198,8 +214,8 @@ window.__main = function(){
   if(D.vencidos && D.vencidos.length){
     hero += '<div class="alerta" role="status">Tenés mantenimiento vencido<span>'+esc(lista(D.vencidos))+'</span></div>';
   }
-  if(P.km){
-    var digitos = String(Math.round(P.km)); while(digitos.length<6) digitos='0'+digitos;
+  function odometro(valor){
+    var digitos = String(Math.round(valor)); while(digitos.length<6) digitos='0'+digitos;
     var drums = '';
     for(var i=0;i<digitos.length;i++){
       var resto = digitos.length-i;
@@ -207,8 +223,10 @@ window.__main = function(){
       var strip=''; for(var n=0;n<10;n++) strip+='<span>'+n+'</span>';
       drums += '<span class="drum'+(i===digitos.length-1?' ult':'')+'"><span class="strip" data-d="'+digitos[i]+'">'+strip+'</span></span>';
     }
-    hero += '<p class="prox-label">Próximo service a los</p>'+
-      '<div class="odo-row"><div class="odo" role="img" aria-label="'+km(P.km)+' kilómetros">'+drums+'</div><span class="odo-unit">km</span></div>'+
+    return '<div class="odo-row"><div class="odo" role="img" aria-label="'+km(valor)+' kilómetros">'+drums+'</div><span class="odo-unit">km</span></div>';
+  }
+  if(P.km){
+    hero += '<p class="prox-label">Próximo service a los</p>'+odometro(P.km)+
       (P.fecha?'<p class="prox-o">o el <strong>'+fLarga(P.fecha)+'</strong>, lo que llegue primero.</p>':'');
   } else if(P.fecha){
     hero += '<p class="prox-label">Próximo service</p><p class="prox-fecha-grande">'+esc(fMes(P.fecha))+'</p>'+
@@ -218,6 +236,28 @@ window.__main = function(){
   }
   if((P.km||P.fecha) && P.items && P.items.length){
     hero += '<p class="prox-items">Le toca: '+esc(lista(P.items).toLowerCase())+'.</p>';
+  }
+  var DI = D.distribucion;
+  if(DI){
+    var dTag = (DI.clave==='vencido'||DI.clave==='cambiar'||DI.kmPasado) ? '<span class="tag t-mal">'+(DI.clave==='cambiar'?'Cambiar':'Vencida')+'</span>' :
+               (DI.clave==='proximo'||DI.clave==='agendar') ? '<span class="tag t-av">'+(DI.clave==='agendar'?'Agendar turno':'Se acerca')+'</span>' : '';
+    var dUlt = DI.ultFecha ? 'Último cambio: '+(DI.ultKm?'a los '+km(DI.ultKm)+' km, ':'')+'en '+fCorta(DI.ultFecha)+(DI.detalle?' ('+DI.detalle+')':'')+'.' : '';
+    if(DI.proxKm){
+      hero += '<div class="dist"><p class="prox-label">Cambio de distribución a los '+dTag+'</p>'+odometro(DI.proxKm)+
+        (DI.proxFecha?'<p class="prox-o">o el <strong>'+fLarga(DI.proxFecha)+'</strong>, lo que llegue primero.</p>':'')+
+        (dUlt?'<p class="prox-items">'+esc(dUlt)+'</p>':'')+'</div>';
+    } else if(DI.proxFecha){
+      hero += '<div class="dist"><p class="prox-label">Cambio de distribución '+dTag+'</p><p class="prox-fecha-grande">'+esc(fMes(DI.proxFecha))+'</p>'+
+        '<p class="prox-o">a más tardar el <strong>'+fLarga(DI.proxFecha)+'</strong>.</p>'+(dUlt?'<p class="prox-items">'+esc(dUlt)+'</p>':'')+'</div>';
+    } else if(DI.clave==='cambiar' || DI.clave==='agendar'){
+      hero += '<div class="dist"><p class="prox-label">Distribución '+dTag+'</p><p class="prox-o">El mecánico recomienda cambiarla'+(DI.clave==='cambiar'?' cuanto antes':'')+'.</p></div>';
+    } else if(DI.revisado || DI.ultFecha){
+      hero += '<div class="dist"><p class="prox-label">Distribución</p><p class="prox-o">'+esc(DI.revisado?'Revisada en '+fCorta(DI.revisado)+'.':dUlt)+'</p></div>';
+    } else {
+      var msgDist = 'Hola! Quería consultar cada cuántos km le toca el cambio de distribución a mi '+nombreAuto+' ('+V.patente+').';
+      hero += '<div class="dist-vacio"><strong>Distribución</strong><p>Todavía no tenemos registrado el cambio de distribución de este vehículo. Es un cambio importante: en muchos motores, si la correa se corta, el motor se daña.</p>'+
+        (wa(msgDist)?'<a target="_blank" rel="noopener" href="'+esc(wa(msgDist))+'">Consultanos cuándo le toca</a>':'')+'</div>';
+    }
   }
   var msgTurno = 'Hola! Quiero pedir un turno de service para mi '+nombreAuto+' ('+V.patente+').';
   if(wa(msgTurno)) hero += '<a class="btn btn-turno" target="_blank" rel="noopener" href="'+esc(wa(msgTurno))+'">'+ICON_CHAT+'Pedir turno por WhatsApp</a>';
@@ -242,6 +282,14 @@ window.__main = function(){
     if(U.obs) s += '<div class="obs"><p>'+esc(U.obs)+'</p><small>Comentario del mecánico</small></div>';
     s += '</div></section>';
     h.push(s);
+  }
+
+  // ---------- RESEÑA EN GOOGLE ----------
+  if(N.resena){
+    h.push('<section class="resena"><div class="wrap"><h2>¿Cómo te atendimos?</h2>'+
+      '<div class="estrellas" aria-hidden="true">'+ICON_STAR+ICON_STAR+ICON_STAR+ICON_STAR+ICON_STAR+'</div>'+
+      '<p>Si te gustó el trabajo, dejanos tu opinión en Google. Son 30 segundos y nos ayuda muchísimo.</p>'+
+      '<a class="btn btn-google" target="_blank" rel="noopener" href="'+esc(N.resena)+'">Calificanos en Google</a></div></section>');
   }
 
   // ---------- RECOMENDACIONES ----------
@@ -322,10 +370,12 @@ window.__main = function(){
   });});
 
   function pie(){
-    var f = '<footer><div class="wrap"><p class="nom">'+esc(N.nombre||'')+'</p>';
+    var f = '<footer><div class="wrap">'+(N.logo?'<img class="logo-pie" src="'+N.logo+'" alt="'+esc(N.nombre||'')+'">':'<p class="nom">'+esc(N.nombre||'')+'</p>');
     if(N.direccion) f += '<p><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(N.direccion)+'">'+esc(N.direccion)+'</a></p>';
     if(N.horario) f += '<p>'+esc(N.horario)+'</p>';
-    if(N.telefono) f += '<p><a target="_top" href="tel:'+esc(N.whatsapp?'+'+N.whatsapp:String(N.telefono).replace(/[^\d+]/g,''))+'">'+esc(N.telefono)+'</a></p>';
+    var msgPie = 'Hola! Te escribo desde el registro de service'+(V.patente?' de mi '+nombreAuto+' ('+V.patente+')':'')+'.';
+    if(wa(msgPie)) f += '<p><a class="wa" target="_blank" rel="noopener" href="'+esc(wa(msgPie))+'" aria-label="Escribinos por WhatsApp al '+esc(N.telefono||N.whatsapp)+'">'+ICON_WA+'<span>'+esc(N.telefono||('+'+N.whatsapp))+'</span></a></p>';
+    else if(N.telefono) f += '<p><a target="_top" href="tel:'+esc(String(N.telefono).replace(/[^\d+]/g,''))+'">'+esc(N.telefono)+'</a></p>';
     f += '<p class="legal">Registro cargado por el taller en cada visita. Los vencimientos son por kilometraje o por fecha, lo que llegue primero.</p></div></footer>';
     return f;
   }
