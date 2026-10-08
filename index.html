@@ -105,6 +105,12 @@ section{padding:28px 0}
 .t-mal{color:#fff;background:var(--mal)}
 .reco .fila-nombre{font-size:18px}
 
+/* promo */
+.promo{margin:4px 0 8px;border:2px solid var(--ambar);border-radius:12px;background:#1a1500;padding:12px 14px}
+.promo strong{display:block;font:700 21px/1.15 "Barlow Condensed",Barlow,sans-serif;color:#fff;letter-spacing:.2px}
+.promo p{margin:4px 0 0;font-size:15.5px;color:var(--texto)}
+.promo a{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;color:var(--ambar);font-weight:700}
+
 /* reseña en Google */
 .resena{padding:22px 0 30px}
 .resena-card{position:relative;overflow:hidden;background:var(--ambar);color:var(--negro);border-radius:16px;padding:22px 18px 20px;box-shadow:0 10px 30px rgba(255,192,0,.18)}
@@ -204,6 +210,11 @@ window.__main = function(){
 
   h.push('<header class="top"><div class="wrap">'+(N.logo?'<img class="logo" src="'+N.logo+'" alt="'+esc(N.nombre)+'">':'<strong>'+esc(N.nombre)+'</strong>')+
          '<div class="top-txt">Registro de<br>mantenimiento</div></div></header>');
+  var PR = N.promo;
+  if(PR && PR.titulo){
+    h.push('<div class="wrap"><aside class="promo" aria-label="Novedades"><strong>'+esc(PR.titulo)+'</strong>'+(PR.texto?'<p>'+esc(PR.texto)+'</p>':'')+
+      (PR.link&&/^https:\/\//.test(PR.link)?'<a target="_blank" rel="noopener" href="'+esc(PR.link)+'">'+esc(PR.boton||'Ver más')+' →</a>':'')+'</aside></div>');
+  }
 
   if(!D.ok){
     h.push('<section class="hero"><div class="wrap"><h2>No encontramos este vehículo</h2><p>Puede que el código del sticker esté dañado o que el registro se haya dado de baja. Escribinos y lo revisamos.</p>'+
