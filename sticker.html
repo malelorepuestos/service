@@ -11,25 +11,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>window.qrcode||document.write('<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"><\/script>')</script>
 <style>
-:root{--negro:#000;--ambar:#FFC000;--gris:#5d636b;--placa-azul:#1f3f99;color-scheme:light}
+:root{--negro:#000;--gris:#5d636b;color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;background:#e4e7eb;font-family:Barlow,system-ui,sans-serif;color:var(--negro)}
 .pantalla{max-width:420px;margin:0 auto;padding:20px 16px 40px;text-align:center}
 .pantalla p{color:var(--gris);font-size:14.5px;margin:12px 0 0}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 26px;border:0;border-radius:12px;background:var(--negro);color:#fff;font:700 17px Barlow,sans-serif;cursor:pointer;margin-top:18px}
 .btn:focus-visible{outline:3px solid #CA5B07;outline-offset:2px}
-.sticker{width:65mm;height:95mm;margin:0 auto;background:#fff;border:0.4mm solid #000;border-radius:3mm;overflow:hidden;display:flex;flex-direction:column;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.18)}
-.s-logo{width:42mm;height:auto;margin-top:3.5mm}
-.s-txt{font:700 4.4mm/1.05 "Barlow Condensed",sans-serif;text-align:center;margin:2mm 5mm 0}
-.s-qr{width:38mm;height:38mm;margin-top:2mm;flex:none}
+/* Etiqueta térmica 50 x 80 mm, solo negro */
+.sticker{width:50mm;height:80mm;margin:0 auto;background:#fff;color:#000;overflow:hidden;display:flex;flex-direction:column;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.2);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.s-logo{width:34mm;height:auto;margin-top:2.5mm;filter:brightness(0)}
+.s-txt{font:700 3.7mm/1.05 "Barlow Condensed",sans-serif;text-align:center;margin:1.6mm 3mm 0}
+.s-qr{width:32mm;height:32mm;margin-top:1.4mm;flex:none}
 .s-qr svg{width:100%;height:100%;display:block}
-.s-pat{margin-top:2mm;border:0.45mm solid #000;border-top:1.6mm solid var(--placa-azul);border-radius:1.2mm;font:700 5mm/1 "Barlow Condensed",sans-serif;letter-spacing:.6mm;padding:.8mm 2.2mm .6mm}
-.s-veh{font:500 3mm/1.2 Barlow,sans-serif;margin-top:1mm;color:#333}
-.s-pie{margin-top:auto;width:100%;background:var(--ambar);font:700 3.4mm/1.15 Barlow,sans-serif;text-align:center;padding:1.8mm 2mm}
+.s-pat{margin-top:1.4mm;border:0.45mm solid #000;border-top:1.2mm solid #000;border-radius:1mm;font:700 4.4mm/1 "Barlow Condensed",sans-serif;letter-spacing:.5mm;padding:.7mm 2mm .5mm}
+.s-veh{font:600 2.6mm/1.2 Barlow,sans-serif;margin-top:.7mm}
+.s-pie{margin-top:auto;width:100%;border-top:0.4mm solid #000;font:700 2.9mm/1.15 Barlow,sans-serif;text-align:center;padding:1.3mm 2mm 1.8mm}
 @media print{
-  @page{size:auto;margin:8mm}
-  body{background:#fff}
-  .pantalla{padding:0}
+  @page{size:50mm 80mm;margin:0}
+  html,body{width:50mm;height:80mm;margin:0;background:#fff}
+  .pantalla{padding:0;max-width:none}
   .no-print{display:none !important}
   .sticker{box-shadow:none;margin:0}
 }
@@ -46,7 +47,7 @@ body{margin:0;background:#e4e7eb;font-family:Barlow,system-ui,sans-serif;color:v
     <div class="s-pie" id="s-pie"></div>
   </div>
   <button class="btn no-print" onclick="window.print()">Imprimir sticker</button>
-  <p class="no-print">Tamaño real: 6,5 × 9,5 cm. Imprimilo en papel autoadhesivo al 100% (sin "ajustar a la página") y probá escanearlo antes de pegarlo.</p>
+  <p class="no-print">Etiqueta de 50 × 80 mm para impresora térmica. En la ventana de impresión elegí el papel de 50 × 80 mm, márgenes "Ninguno" y escala 100%. Probá escanearlo antes de pegarlo.</p>
 </div>
 <script src="config.js"></script>
 <script>
@@ -74,7 +75,7 @@ window.__main = function(){
   el('s-veh').textContent = D.vehiculo || '';
   var pie = N.telefono ? 'Turnos: ' + N.telefono : (N.nombre || '');
   el('s-pie').textContent = pie;
-  try{ var q = qrcode(0,'M'); q.addData(D.link || ''); q.make(); el('s-qr').innerHTML = q.createSvgTag({cellSize:4, margin:0, scalable:true}); }
+  try{ var q = qrcode(0,'M'); q.addData(D.link || ''); q.make(); el('s-qr').innerHTML = q.createSvgTag({cellSize:4, margin:2, scalable:true}); }
   catch(e){ el('s-qr').textContent = 'No se pudo generar el QR'; }
 };
 if (window.__arranque) window.__arranque();
